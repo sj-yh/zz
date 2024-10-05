@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>视界萤火自主问答服务中心</title>
+<style>
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 10px;
+  }
+  .terminal {
+    font-size: 16px;
+    line-height: 1.2;
+    white-space: pre-wrap;
+  }
+  .prompt {
+    color: #4bf;
+  }
+  .command {
+    margin-left: 5px;
+  }
+  .output {
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal" id="terminal">
+  版本v1.0.0
+  开发者：成烁
+  运营维护：视界萤火网络
+  输入“帮助”查看全部命令<br>
+  © Horizon-firefly 2024<br>
+  <span class="prompt">$ </span><span class="command" id="command-line">输入相应的命令</span>
+</div>
+<input type="text" id="input-line" style="width: 80%; color: #000; background-color: #fff;"/>
+
+<script>
+  const terminal = document.getElementById('terminal');
+  const commandLine = document.getElementById('command-line');
+  const inputLine = document.getElementById('input-line');
+  let isHelpShown = false;
+  let waitingForDownload = false;
+
+  function print(text, className) {
+    terminal.insertAdjacentHTML('beforeend', `<span class="${className}">${text}</span><br>`);
+  }
+
+  function clearInput() {
+    inputLine.value = '';
+    commandLine.textContent = '输入相应的命令';
+  }
+
+  function processCommand(input) {
+    if (input.trim() === '') {
+      print('不能执行空白指令', 'output');
+    } else if (input === '帮助' || input === 'help') {
+      print('显示所有命令', 'output');
+      showHelp();
+    } else if (input === '清除' || input === 'clear') {
+      terminal.innerHTML = '2024年 成硕制作<br>输入帮助 查看全部命令<br><span class="prompt">$ </span><span class="command">输入相应的命令</span>';
+    } else if (input === '成烁官网' ) {
+      print('命令识别成功，回车进入官网', 'output');
+      waitingForDownload = true;
+    } else if (input === '视界HTML编辑器' ) {
+        print('命令识别成功<br>在这里未向大家开发，敬请期待', 'output');
+    } else {
+      print(`命令 "${input}" 未识别`, 'output');
+    }
+    clearInput();
+  }
+
+  function showHelp() {
+    if (!isHelpShown) {
+      print('帮助命令: 显示所有命令', 'output');
+      print('清除命令: 清屏', 'output');
+      print('成烁官网命令: 打开成烁官网', 'output');
+      print('视界HTML编辑器命令: 下载视界HTML编辑器', 'output');
+      isHelpShown = true;
+    } else {
+      print('帮助信息已显示', 'output');
+    }
+  }
+
+  inputLine.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+      let input = inputLine.value.trim();
+      if (waitingForDownload && input === '') {
+        window.location.href = 'https://chengshuo11.github.io'; // Replace with the actual download URL
+      } else {
+        processCommand(input);
+      }
+    }
+  });
+
+  document.getElementById('command-line').addEventListener('click', () => {
+    inputLine.focus();
+  });
+</script>
+
+</body>
+</html>
